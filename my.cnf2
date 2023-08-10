@@ -1,0 +1,118 @@
+[mysqld]
+########basic settings########
+server-id = 140224
+port = 3306
+user = mysql
+socket=/apply/mysql.sock
+autocommit = 1
+
+#read_only = 1
+#########connection-control##########
+#connection-control-failed-connections-threshold=5
+#connection-control-min-connection-delay=108000
+
+
+#skip-grant-tables
+character_set_server=utf8mb4
+skip_name_resolve = 1
+max_connections = 10240
+max_connect_errors = 1000
+datadir = /apply
+transaction_isolation = REPEATABLE-READ
+explicit_defaults_for_timestamp = 1
+join_buffer_size = 4194304
+tmp_table_size = 67108864
+tmpdir = /tmp
+max_allowed_packet = 16M
+sql_mode = "NO_AUTO_CREATE_USER"
+interactive_timeout = 604800
+wait_timeout = 604800
+read_buffer_size = 8M
+read_rnd_buffer_size = 8M
+sort_buffer_size = 8M
+
+########log settings########
+log_error = error.log
+slow_query_log = 1
+long_query_time = 1
+slow_query_log_file = /apply/slowlog/slow-query.log
+
+log_queries_not_using_indexes = 0
+log_slow_admin_statements = 1
+log_slow_slave_statements = 1
+log_throttle_queries_not_using_indexes = 0
+expire_logs_days = 7
+min_examined_row_limit = 0
+
+log_bin = /apply/binlog/mysql-bin.index
+binlog_format = row
+sync_binlog = 1
+binlog-rows-query-log-events=1
+
+gtid_mode = on
+enforce_gtid_consistency = 1
+
+log_slave_updates = on
+skip_slave_start = on
+relay_log = /apply/relaylog/mysql-relay
+relay_log_purge = 0
+relay_log_recovery = 1
+
+########replication settings########
+master_info_repository = TABLE
+relay_log_info_repository = TABLE
+sync-master-info=10000
+
+#binlog_gtid_simple_recovery = 1
+slave-parallel-workers=4
+#slave_skip_errors = ddl_exist_errors
+
+########innodb settings########
+innodb_page_size = 16384
+innodb_buffer_pool_size = 4G
+innodb_buffer_pool_instances = 4
+innodb_buffer_pool_load_at_startup = 1
+innodb_buffer_pool_dump_at_shutdown = 1
+innodb_lru_scan_depth = 2000
+innodb_lock_wait_timeout = 15
+innodb_io_capacity = 4000
+innodb_io_capacity_max = 8000
+innodb_flush_method = O_DIRECT
+innodb_log_group_home_dir = /apply
+#innodb_undo_directory = /apply
+#innodb_undo_logs = 128
+#innodb_undo_tablespaces = 3
+innodb_flush_neighbors = 1
+innodb_log_file_size = 512M
+innodb_log_buffer_size = 16777216
+innodb_purge_threads = 4
+innodb_large_prefix = 1
+innodb_thread_concurrency = 32
+innodb_print_all_deadlocks = 1
+innodb_strict_mode = 0
+innodb_sort_buffer_size = 67108864 
+########semi sync replication settings########
+#plugin_dir=/usr/local/mysql/lib/plugin
+#plugin_load = "rpl_semi_sync_master=semisync_master.so;rpl_semi_sync_slave=semisync_slave.so"
+#loose_rpl_semi_sync_master_enabled = 1
+#loose_rpl_semi_sync_slave_enabled = 1
+#loose_rpl_semi_sync_master_timeout = 5000
+
+[mysqld-5.7]
+innodb_buffer_pool_dump_pct = 40
+innodb_page_cleaners = 4
+innodb_undo_log_truncate = 1
+innodb_max_undo_log_size = 512M
+innodb_purge_rseg_truncate_frequency = 128
+binlog_gtid_simple_recovery=1
+log_timestamps=system
+transaction_write_set_extraction=XXHASH64
+show_compatibility_56=on
+
+[mysql]
+socket=/apply/mysql.sock
+no_auto_rehash
+prompt = "\\R:\\m:\\s \\d> "
+
+[mysqldump]
+socket=/apply/mysql.sock
